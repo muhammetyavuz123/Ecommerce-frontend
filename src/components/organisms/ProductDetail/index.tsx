@@ -1,6 +1,18 @@
 import { FC } from "react";
 import { Slider, InfoCard } from "../../molecules";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
+import { fetchProduct } from "../../../apis";
+import moment from "moment";
 export const ProductDetail: FC<{}> = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const { isLoading, error, data } = useQuery<product, Error>(
+    ["product", id],
+    () => fetchProduct(id)
+  );
+  console.log(moment(data?.createdAt).format("DD / MM / YY"));
+
   return (
     <>
       <div className="container mx-auto mt-14 ">
@@ -9,14 +21,19 @@ export const ProductDetail: FC<{}> = () => {
             <Slider />
           </div>
           <div>
-            <InfoCard
-              ProductTitle="Çatal Kaşık Takımları"
-              ProductPrice="188.00"
-              ProductSales="12"
-              ProductDescription="Lorem Ipsum, masaüstü yayıncılık ve basın yayın sektöründe kullanılan taklit yazı bloğu olarak tanımlanır. Lipsum, oluşturulacak şablon ve taslaklarda içerik yerine geçerek yazı bloğunu doldurmak için kullanılır."
-              ProductCount="188"
-              ProductCountKind="Koli"
-            />
+            {data ? (
+              <InfoCard
+                ProductTitle={data.title}
+                ProductPrice={data.price}
+                ProductSales="12"
+                ProductDescription={data.description}
+                ProductCount={moment(data.createdAt).format("DD / MM / YY")}
+                date={moment(data.createdAt).format("DD/MM/YY")}
+                ProductCountKind="Koli"
+              />
+            ) : (
+              "Loadin"
+            )}
           </div>
         </div>
       </div>

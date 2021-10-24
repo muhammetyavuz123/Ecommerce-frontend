@@ -8,20 +8,7 @@ export const RightFormCard: FC<{
   registerAndLogin: string;
   registerAndLoginHref: string;
   buttonTitle: string;
-  InputList: {
-    type: string;
-    name: string;
-    id: string;
-    placeholder: string;
-  }[];
-}> = ({
-  title,
-  subTitle,
-  registerAndLogin,
-  buttonTitle,
-  InputList,
-  registerAndLoginHref,
-}) => {
+}> = ({ title, subTitle, children }) => {
   return (
     <>
       <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
@@ -48,28 +35,8 @@ export const RightFormCard: FC<{
           <h2 className="text-xl">{title}</h2>
         </div>
         <p className="text-gray-100">{subTitle}</p>
-        <form action="" className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
-          {InputList.map(({ type, name, id, placeholder }, index) => (
-            <div key={index} className="pb-2 pt-4">
-              <Input
-                type={type}
-                name={name}
-                id={id}
-                placeholder={placeholder}
-              />
-            </div>
-          ))}
-
-          <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
-            <Link href={registerAndLoginHref} passHref>
-              <a>{registerAndLogin}</a>
-            </Link>
-          </div>
-          <div className="px-4 pb-2 pt-4">
-            <button className="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">
-              {buttonTitle}
-            </button>
-          </div>
+        <div className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
+          {children}
 
           <div className="p-4 text-center right-0 left-0 flex justify-center space-x-4 mt-16 lg:hidden ">
             <a href="#">
@@ -106,7 +73,7 @@ export const RightFormCard: FC<{
               </svg>
             </a>
           </div>
-        </form>
+        </div>
       </div>
     </>
   );

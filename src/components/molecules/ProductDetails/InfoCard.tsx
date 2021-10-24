@@ -2,11 +2,12 @@ import { FC } from "react";
 
 export const InfoCard: FC<{
   ProductTitle: string;
-  ProductPrice: string;
+  ProductPrice: number | undefined;
   ProductSales: string;
   ProductDescription: string;
   ProductCount?: string;
   ProductCountKind?: string;
+  date: string;
 }> = ({
   ProductTitle,
   ProductPrice,
@@ -14,6 +15,7 @@ export const InfoCard: FC<{
   ProductDescription,
   ProductCount,
   ProductCountKind,
+  date,
 }) => {
   return (
     <>
@@ -23,7 +25,7 @@ export const InfoCard: FC<{
       <p className="text-gray-500 text-sm">
         By{" "}
         <a href="#" className="text-indigo-600 hover:underline">
-          ABC Company
+          {date}
         </a>
       </p>
 

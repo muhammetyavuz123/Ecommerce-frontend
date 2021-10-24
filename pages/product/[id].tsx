@@ -1,8 +1,8 @@
 import Head from "next/head";
-import { Navbar, Footer, ProductDetail } from "../src/components/organisms";
-import { Breadcrumbs, Tabs } from "../src/components/molecules";
+import { Navbar, Footer, ProductDetail } from "../../src/components/organisms";
+import { Breadcrumbs, Tabs } from "../../src/components/molecules";
 
-export default function productDetails() {
+export default function product() {
   return (
     <div>
       <Head>

@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-export const Pagination: FC<{}> = ({}) => {
+export const Pagination: FC = () => {
   return (
     <div>
       <ul className="flex justify-center items-center mt-16 mb-8">

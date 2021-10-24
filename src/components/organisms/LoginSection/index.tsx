@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FC } from "react";
-import { LeftImageCard, RightFormCard } from "../../molecules";
+import { LeftImageCard, RightFormCard, LoginForm } from "../../molecules";
 
 export const LoginSection: FC<{}> = () => {
   return (
@@ -23,26 +23,14 @@ export const LoginSection: FC<{}> = () => {
           style={{ backgroundColor: "#161616" }}
         >
           <RightFormCard
-            InputList={[
-              {
-                type: "EMail",
-                name: "EMail",
-                id: "EMail",
-                placeholder: "EMail",
-              },
-              {
-                type: "Password",
-                name: "Password",
-                id: "Password",
-                placeholder: "Password",
-              },
-            ]}
             title="Giriş"
             subTitle="Email Ve Şifrenizi Giriniz"
             registerAndLoginHref="/Auth/register"
             registerAndLogin="Kayıt Ol!"
             buttonTitle="Giriş "
-          />
+          >
+            <LoginForm />
+          </RightFormCard>
         </div>
       </section>
     </>

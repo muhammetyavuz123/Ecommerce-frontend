@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { FC } from "react";
-import { LeftImageCard, RightFormCard } from "../../molecules";
+import { LeftImageCard, RegisterForm, RightFormCard } from "../../molecules";
 
 export const RegisterSection: FC<{}> = () => {
   return (
@@ -23,32 +22,14 @@ export const RegisterSection: FC<{}> = () => {
           style={{ backgroundColor: "#161616" }}
         >
           <RightFormCard
-            InputList={[
-              {
-                type: "Name",
-                name: "Name",
-                id: "Name",
-                placeholder: "İsim Soyad",
-              },
-              {
-                type: "EMail",
-                name: "EMail",
-                id: "EMail",
-                placeholder: "EMail",
-              },
-              {
-                type: "Password",
-                name: "Password",
-                id: "Password",
-                placeholder: "Password",
-              },
-            ]}
             title="Kayıt Ol"
             subTitle="**Kayıt Olmak için istenen bilgileri eksiksiz giriniz"
             registerAndLogin="Zaten Üyeyim Giriş Yap"
-            registerAndLoginHref="/Auth/login"
+            registerAndLoginHref="/auth/login"
             buttonTitle="Kayıt Ol "
-          />
+          >
+            <RegisterForm />
+          </RightFormCard>
         </div>
       </section>
     </>

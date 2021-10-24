@@ -33,7 +33,9 @@ export const Navbar: FC<{}> = ({}) => {
           </Link>
           <Link href="/products" passHref>
             <a>
-              <div className="font-bold text-xl text-black">Ürünler</div>
+              <div className="font-bold text-xl mt-[2px] text-black">
+                Ürünler
+              </div>
             </a>
           </Link>
         </div>
@@ -78,7 +80,7 @@ export const Navbar: FC<{}> = ({}) => {
         <div className="flex-initial">
           <div className="flex justify-end items-center relative">
             <div className="flex mr-4 items-center">
-              <Link href="Auth/login" passHref>
+              <Link href="auth/login" passHref>
                 <a className="inline-block py-2 px-3 hover:bg-gray-200 rounded-full">
                   <div className="flex items-center relative cursor-pointer whitespace-nowrap">
                     Giriş
@@ -120,34 +122,9 @@ export const Navbar: FC<{}> = ({}) => {
               <div className="inline relative">
                 <button
                   type="button"
-                  className="inline-flex items-center relative px-2 border rounded-full hover:shadow-lg"
+                  className="flex justify-center items-center  px-2 border rounded-full hover:shadow-lg"
                 >
-                  <div className="pl-1">
-                    <svg
-                      viewBox="0 0 32 32"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="presentation"
-                      focusable="false"
-                      style={{
-                        display: "block",
-                        fill: "none",
-                        height: "16px",
-                        width: "16px",
-                        stroke: "currentcolor",
-                        strokeWidth: 3,
-                        overflow: "visible",
-                      }}
-                    >
-                      <g fill="none" fillRule="nonzero">
-                        <path d="m2 16h28"></path>
-                        <path d="m2 24h28"></path>
-                        <path d="m2 8h28"></path>
-                      </g>
-                    </svg>
-                  </div>
-
-                  <div className="block flex-grow-0 flex-shrink-0 h-10 w-12 pl-5">
+                  <div className="w-8 h-8 flex-grow-0 flex-shrink-0  flex justify-center items-center">
                     <svg
                       viewBox="0 0 32 32"
                       xmlns="http://www.w3.org/2000/svg"

@@ -22,7 +22,6 @@ export default function Products() {
         <Breadcrumbs page="Tüm Ürünler" />
         {/* <ProductsCards /> */}
         <ProductLayout />
-        <Pagination />
         <Footer />
       </main>
     </div>
