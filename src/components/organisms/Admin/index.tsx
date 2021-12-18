@@ -14,7 +14,7 @@ export const Admin: FC<{}> = () => {
           <div className="h-full ml-14 mt-14 mb-10 md:ml-64">
             <StatictisCard />
             <div className="grid grid-cols-1 lg:grid-cols-1 p-4 gap-4">
-              <OrderTable
+              {/* <OrderTable
                 OrderList={[
                   {
                     orderImage: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -33,10 +33,10 @@ export const Admin: FC<{}> = () => {
                     orderTotalPrice: "36.00",
                   },
                 ]}
-              />
+              /> */}
             </div>
             <hr />
-            <ProductTable
+            {/* <ProductTable
               productList={[
                 {
                   productImage: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -53,7 +53,7 @@ export const Admin: FC<{}> = () => {
                   productTotalPrice: "36.00",
                 },
               ]}
-            />
+            /> */}
           </div>
         </div>
       </div>

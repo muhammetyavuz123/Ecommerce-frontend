@@ -1,8 +1,7 @@
 import Head from "next/head";
-import { FC } from "react";
-import { ProductSection } from "../../src/components/organisms";
+import { CreateProductSection } from "../../../src/components/organisms";
 
-export default function products() {
+export default function addProduct() {
   return (
     <div>
       <Head>
@@ -12,7 +11,7 @@ export default function products() {
       </Head>
 
       <main>
-        <ProductSection />
+        <CreateProductSection />
       </main>
     </div>
   );

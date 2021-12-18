@@ -1,3 +1,9 @@
-export { fetchProducts } from "./product";
-export { fetchProduct } from "./product";
-export { registerFetch } from "./auth";
+export {
+  fetchProducts,
+  fetchProduct,
+  deleteProduct,
+  updateProduct,
+  postProduct,
+} from "./product";
+export { postOrder, fetchOrders } from "./order";
+export { registerFetch, loginFetch, fetchMe, logoutFetch } from "./auth";

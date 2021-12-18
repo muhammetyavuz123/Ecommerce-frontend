@@ -1,152 +1,627 @@
+/* eslint-disable @next/next/no-img-element */
 import { FC, useState } from "react";
 import Link from "next/link";
+import { useAuth } from "../../../contexts/authContext";
+import { useBasket } from "../../../contexts/BasketContext";
+import { Fragment } from "react";
+import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
+import {
+  MenuIcon,
+  SearchIcon,
+  ShoppingBagIcon,
+  XIcon,
+} from "@heroicons/react/outline";
+import { Button } from "../../atoms";
+
+const navigation = {
+  categories: [
+    {
+      id: "women",
+      name: "Women",
+      featured: [
+        {
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt:
+            "Models sitting back to back, wearing Basic Tee in black and bone.",
+        },
+        {
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt:
+            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
+        },
+      ],
+      sections: [
+        {
+          id: "clothing",
+          name: "Clothing",
+          items: [
+            { name: "Tops", href: "#" },
+            { name: "Dresses", href: "#" },
+            { name: "Pants", href: "#" },
+            { name: "Denim", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
+          ],
+        },
+        {
+          id: "accessories",
+          name: "Accessories",
+          items: [
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
+          ],
+        },
+        {
+          id: "brands",
+          name: "Brands",
+          items: [
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Significant Other", href: "#" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "men",
+      name: "Men",
+      featured: [
+        {
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+          imageAlt:
+            "Drawstring top with elastic loop closure and textured interior padding.",
+        },
+        {
+          name: "Artwork Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
+          imageAlt:
+            "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
+        },
+      ],
+      sections: [
+        {
+          id: "clothing",
+          name: "Clothing",
+          items: [
+            { name: "Tops", href: "#" },
+            { name: "Pants", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
+          ],
+        },
+        {
+          id: "accessories",
+          name: "Accessories",
+          items: [
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
+          ],
+        },
+        {
+          id: "brands",
+          name: "Brands",
+          items: [
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
+          ],
+        },
+      ],
+    },
+  ],
+  pages: [
+    { name: "Company", href: "#" },
+    { name: "Ürünler", href: "#" },
+  ],
+};
+
+function classNames(...classes: any[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export const Navbar: FC<{}> = ({}) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { loggedIn, user } = useAuth();
+  const { items } = useBasket();
+  const [open, setOpen] = useState(false);
+  console.log("user", user);
+
   return (
     <>
-      <nav className=" bg-white w-full flex relative justify-between items-center mx-auto px-8 h-20 border border-b-2">
-        <div className="inline-flex space-x-10 mt-2">
-          <Link href="/" passHref>
-            <a className="_o6689fn" href="#">
-              <div className="hidden md:block">
-                <svg
-                  width="102"
-                  height="32"
-                  fill="currentcolor"
-                  style={{ display: "block" }}
-                >
-                  <path d="M29.24 22.68c-.16-.39-.31-.8-.47-1.15l-.74-1.67-.03-.03c-2.2-4.8-4.55-9.68-7.04-14.48l-.1-.2c-.25-.47-.5-.99-.76-1.47-.32-.57-.63-1.18-1.14-1.76a5.3 5.3 0 00-8.2 0c-.47.58-.82 1.19-1.14 1.76-.25.52-.5 1.03-.76 1.5l-.1.2c-2.45 4.8-4.84 9.68-7.04 14.48l-.06.06c-.22.52-.48 1.06-.73 1.64-.16.35-.32.73-.48 1.15a6.8 6.8 0 007.2 9.23 8.38 8.38 0 003.18-1.1c1.3-.73 2.55-1.79 3.95-3.32 1.4 1.53 2.68 2.59 3.95 3.33A8.38 8.38 0 0022.75 32a6.79 6.79 0 006.75-5.83 5.94 5.94 0 00-.26-3.5zm-14.36 1.66c-1.72-2.2-2.84-4.22-3.22-5.95a5.2 5.2 0 01-.1-1.96c.07-.51.26-.96.52-1.34.6-.87 1.65-1.41 2.8-1.41a3.3 3.3 0 012.8 1.4c.26.4.45.84.51 1.35.1.58.06 1.25-.1 1.96-.38 1.7-1.5 3.74-3.21 5.95zm12.74 1.48a4.76 4.76 0 01-2.9 3.75c-.76.32-1.6.41-2.42.32-.8-.1-1.6-.36-2.42-.84a15.64 15.64 0 01-3.63-3.1c2.1-2.6 3.37-4.97 3.85-7.08.23-1 .26-1.9.16-2.73a5.53 5.53 0 00-.86-2.2 5.36 5.36 0 00-4.49-2.28c-1.85 0-3.5.86-4.5 2.27a5.18 5.18 0 00-.85 2.21c-.13.84-.1 1.77.16 2.73.48 2.11 1.78 4.51 3.85 7.1a14.33 14.33 0 01-3.63 3.12c-.83.48-1.62.73-2.42.83a4.76 4.76 0 01-5.32-4.07c-.1-.8-.03-1.6.29-2.5.1-.32.25-.64.41-1.02.22-.52.48-1.06.73-1.6l.04-.07c2.16-4.77 4.52-9.64 6.97-14.41l.1-.2c.25-.48.5-.99.76-1.47.26-.51.54-1 .9-1.4a3.32 3.32 0 015.09 0c.35.4.64.89.9 1.4.25.48.5 1 .76 1.47l.1.2c2.44 4.77 4.8 9.64 7 14.41l.03.03c.26.52.48 1.1.73 1.6.16.39.32.7.42 1.03.19.9.29 1.7.19 2.5zM41.54 24.12a5.02 5.02 0 01-3.95-1.83 6.55 6.55 0 01-1.6-4.48 6.96 6.96 0 011.66-4.58 5.3 5.3 0 014.08-1.86 4.3 4.3 0 013.7 1.92l.1-1.57h2.92V23.8h-2.93l-.1-1.76a4.52 4.52 0 01-3.88 2.08zm.76-2.88c.58 0 1.09-.16 1.57-.45.44-.32.8-.74 1.08-1.25.25-.51.38-1.12.38-1.8a3.42 3.42 0 00-1.47-3.04 2.95 2.95 0 00-3.12 0c-.44.32-.8.74-1.08 1.25a4.01 4.01 0 00-.38 1.8 3.42 3.42 0 001.47 3.04c.47.29.98.45 1.55.45zM53.45 8.46c0 .35-.06.67-.22.93-.16.25-.38.48-.67.64-.29.16-.6.22-.92.22-.32 0-.64-.06-.93-.22a1.84 1.84 0 01-.67-.64 1.82 1.82 0 01-.22-.93c0-.36.07-.68.22-.93.16-.3.39-.48.67-.64.29-.16.6-.23.93-.23a1.84 1.84 0 011.6.86 2 2 0 01.21.94zm-3.4 15.3V11.7h3.18v12.08h-3.19zm11.68-8.9v.04c-.15-.07-.35-.1-.5-.13-.2-.04-.36-.04-.55-.04-.89 0-1.56.26-2 .8-.48.55-.7 1.32-.7 2.31v5.93h-3.19V11.69h2.93l.1 1.83c.32-.64.7-1.12 1.24-1.48a3.1 3.1 0 011.81-.5c.23 0 .45.02.64.06.1.03.16.03.22.06v3.2zm1.28 8.9V6.74h3.18v6.5c.45-.58.96-1.03 1.6-1.38a5.02 5.02 0 016.08 1.31 6.55 6.55 0 011.6 4.49 6.96 6.96 0 01-1.66 4.58 5.3 5.3 0 01-4.08 1.86 4.3 4.3 0 01-3.7-1.92l-.1 1.57-2.92.03zm6.15-2.52c.57 0 1.08-.16 1.56-.45.44-.32.8-.74 1.08-1.25.26-.51.38-1.12.38-1.8 0-.67-.12-1.28-.38-1.79a3.75 3.75 0 00-1.08-1.25 2.95 2.95 0 00-3.12 0c-.45.32-.8.74-1.09 1.25a4.01 4.01 0 00-.38 1.8 3.42 3.42 0 001.47 3.04c.47.29.98.45 1.56.45zm7.51 2.53V11.69h2.93l.1 1.57a3.96 3.96 0 013.54-1.89 4.1 4.1 0 013.82 2.44c.35.76.54 1.7.54 2.75v7.24h-3.19v-6.82c0-.84-.19-1.5-.57-1.99-.38-.48-.9-.74-1.56-.74-.48 0-.9.1-1.27.32-.35.23-.64.52-.86.93a2.7 2.7 0 00-.32 1.35v6.92h-3.16zm12.52 0V6.73h3.19v6.5a4.67 4.67 0 013.73-1.89 5.02 5.02 0 013.95 1.83 6.57 6.57 0 011.59 4.48 6.95 6.95 0 01-1.66 4.58 5.3 5.3 0 01-4.08 1.86 4.3 4.3 0 01-3.7-1.92l-.09 1.57-2.93.03zm6.18-2.53c.58 0 1.09-.16 1.56-.45.45-.32.8-.74 1.09-1.25.25-.51.38-1.12.38-1.8a3.42 3.42 0 00-1.47-3.04 2.95 2.95 0 00-3.12 0c-.44.32-.8.74-1.08 1.25a3.63 3.63 0 00-.38 1.8 3.42 3.42 0 001.47 3.04c.47.29.95.45 1.55.45z"></path>
-                </svg>
-              </div>
-              <div className="block md:hidden">
-                <svg
-                  width="30"
-                  height="32"
-                  fill="currentcolor"
-                  style={{ display: "block" }}
-                >
-                  <path d="M29.24 22.68c-.16-.39-.31-.8-.47-1.15l-.74-1.67-.03-.03c-2.2-4.8-4.55-9.68-7.04-14.48l-.1-.2c-.25-.47-.5-.99-.76-1.47-.32-.57-.63-1.18-1.14-1.76a5.3 5.3 0 00-8.2 0c-.47.58-.82 1.19-1.14 1.76-.25.52-.5 1.03-.76 1.5l-.1.2c-2.45 4.8-4.84 9.68-7.04 14.48l-.06.06c-.22.52-.48 1.06-.73 1.64-.16.35-.32.73-.48 1.15a6.8 6.8 0 007.2 9.23 8.38 8.38 0 003.18-1.1c1.3-.73 2.55-1.79 3.95-3.32 1.4 1.53 2.68 2.59 3.95 3.33A8.38 8.38 0 0022.75 32a6.79 6.79 0 006.75-5.83 5.94 5.94 0 00-.26-3.5zm-14.36 1.66c-1.72-2.2-2.84-4.22-3.22-5.95a5.2 5.2 0 01-.1-1.96c.07-.51.26-.96.52-1.34.6-.87 1.65-1.41 2.8-1.41a3.3 3.3 0 012.8 1.4c.26.4.45.84.51 1.35.1.58.06 1.25-.1 1.96-.38 1.7-1.5 3.74-3.21 5.95zm12.74 1.48a4.76 4.76 0 01-2.9 3.75c-.76.32-1.6.41-2.42.32-.8-.1-1.6-.36-2.42-.84a15.64 15.64 0 01-3.63-3.1c2.1-2.6 3.37-4.97 3.85-7.08.23-1 .26-1.9.16-2.73a5.53 5.53 0 00-.86-2.2 5.36 5.36 0 00-4.49-2.28c-1.85 0-3.5.86-4.5 2.27a5.18 5.18 0 00-.85 2.21c-.13.84-.1 1.77.16 2.73.48 2.11 1.78 4.51 3.85 7.1a14.33 14.33 0 01-3.63 3.12c-.83.48-1.62.73-2.42.83a4.76 4.76 0 01-5.32-4.07c-.1-.8-.03-1.6.29-2.5.1-.32.25-.64.41-1.02.22-.52.48-1.06.73-1.6l.04-.07c2.16-4.77 4.52-9.64 6.97-14.41l.1-.2c.25-.48.5-.99.76-1.47.26-.51.54-1 .9-1.4a3.32 3.32 0 015.09 0c.35.4.64.89.9 1.4.25.48.5 1 .76 1.47l.1.2c2.44 4.77 4.8 9.64 7 14.41l.03.03c.26.52.48 1.1.73 1.6.16.39.32.7.42 1.03.19.9.29 1.7.19 2.5z"></path>
-                </svg>
-              </div>
-            </a>
-          </Link>
-          <Link href="/products" passHref>
-            <a>
-              <div className="font-bold text-xl mt-[2px] text-black">
-                Ürünler
-              </div>
-            </a>
-          </Link>
-        </div>
+      <div className="bg-white">
+        {/* Mobile menu */}
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog
+            as="div"
+            className="fixed inset-0 flex z-40 lg:hidden"
+            onClose={setOpen}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="transition-opacity ease-linear duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity ease-linear duration-300"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
+            </Transition.Child>
 
-        <div className="hidden sm:block flex-shrink flex-grow-0 justify-start px-2">
-          <div className="inline-block">
-            <div className="inline-flex items-center max-w-full">
-              <button
-                className="flex items-center flex-grow-0 flex-shrink pl-2 relative w-60 border rounded-full px-1  py-1"
-                type="button"
-              >
-                <div className="block flex-grow flex-shrink overflow-hidden">
-                  Start your search
-                </div>
-                <div className="flex items-center justify-center relative  h-8 w-8 rounded-full">
-                  <svg
-                    viewBox="0 0 32 32"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="presentation"
-                    focusable="false"
-                    style={{
-                      display: "block",
-                      fill: "none",
-                      height: "12px",
-                      width: "12px",
-                      stroke: "currentcolor",
-                      strokeWidth: "5.33333",
-                      overflow: "visible",
-                    }}
+            <Transition.Child
+              as={Fragment}
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
+            >
+              <div className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
+                <div className="px-4 pt-5 pb-2 flex">
+                  <button
+                    type="button"
+                    className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
+                    onClick={() => setOpen(false)}
                   >
-                    <g fill="none">
-                      <path d="m13 24c6.0751322 0 11-4.9248678 11-11 0-6.07513225-4.9248678-11-11-11-6.07513225 0-11 4.92486775-11 11 0 6.0751322 4.92486775 11 11 11zm8-3 9 9"></path>
-                    </g>
-                  </svg>
+                    <span className="sr-only">Close menu</span>
+                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
                 </div>
-              </button>
-            </div>
-          </div>
-        </div>
 
-        <div className="flex-initial">
-          <div className="flex justify-end items-center relative">
-            <div className="flex mr-4 items-center">
-              <Link href="auth/login" passHref>
-                <a className="inline-block py-2 px-3 hover:bg-gray-200 rounded-full">
-                  <div className="flex items-center relative cursor-pointer whitespace-nowrap">
-                    Giriş
+                {/* Links */}
+                <Tab.Group as="div" className="mt-2">
+                  <div className="border-b border-gray-200">
+                    <Tab.List className="-mb-px flex px-4 space-x-8">
+                      {navigation.categories.map((category) => (
+                        <Tab
+                          key={category.name}
+                          className={({ selected }) =>
+                            classNames(
+                              selected
+                                ? "text-indigo-600 border-indigo-600"
+                                : "text-gray-900 border-transparent",
+                              "flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium"
+                            )
+                          }
+                        >
+                          {category.name}
+                        </Tab>
+                      ))}
+                    </Tab.List>
                   </div>
-                </a>
-              </Link>
-              <div className="block relative">
-                <Link href="/basket" passHref>
-                  <a>
-                    <button
-                      type="button"
-                      className="inline-block py-2 px-3 hover:bg-gray-200 rounded-full relative "
-                    >
-                      <div className="flex items-center h-5">
-                        <div className="_xpkakx">
+                  <Tab.Panels as={Fragment}>
+                    {navigation.categories.map((category) => (
+                      <Tab.Panel
+                        key={category.name}
+                        className="pt-10 pb-8 px-4 space-y-10"
+                      >
+                        <div className="grid grid-cols-2 gap-x-4">
+                          {category.featured.map((item) => (
+                            <div
+                              key={item.name}
+                              className="group relative text-sm"
+                            >
+                              <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
+                                <img
+                                  src={item.imageSrc}
+                                  alt={item.imageAlt}
+                                  className="object-center object-cover"
+                                />
+                              </div>
+                              <a
+                                href={item.href}
+                                className="mt-6 block font-medium text-gray-900"
+                              >
+                                <span
+                                  className="absolute z-10 inset-0"
+                                  aria-hidden="true"
+                                />
+                                {item.name}
+                              </a>
+                              <p aria-hidden="true" className="mt-1">
+                                Alışveriş Yap
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                        {category.sections.map((section) => (
+                          <div key={section.name}>
+                            <p
+                              id={`${category.id}-${section.id}-heading-mobile`}
+                              className="font-medium text-gray-900"
+                            >
+                              {section.name}
+                            </p>
+                            <ul
+                              role="list"
+                              aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
+                              className="mt-6 flex flex-col space-y-6"
+                            >
+                              {section.items.map((item) => (
+                                <li key={item.name} className="flow-root">
+                                  <a
+                                    href={item.href}
+                                    className="-m-2 p-2 block text-gray-500"
+                                  >
+                                    {item.name}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </Tab.Panel>
+                    ))}
+                  </Tab.Panels>
+                </Tab.Group>
+
+                <div className="border-t border-gray-200 py-6 px-4 space-y-6">
+                  {navigation.pages.map((page) => (
+                    <div key={page.name} className="flow-root">
+                      <a
+                        href={page.href}
+                        className="-m-2 p-2 block font-medium text-gray-900"
+                      >
+                        {page.name}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+
+                {loggedIn ? (
+                  ""
+                ) : (
+                  <div className="border-t border-gray-200 py-6 px-4 space-y-6">
+                    <div className="flow-root">
+                      <Link href="auth/login" passHref>
+                        <a
+                          href="#"
+                          className="-m-2 p-2 block font-medium text-gray-900"
+                        >
+                          Giriş
+                        </a>
+                      </Link>
+                    </div>
+                    <div className="flow-root">
+                      <Link href="auth/register" passHref>
+                        <a
+                          href="#"
+                          className="-m-2 p-2 block font-medium text-gray-900"
+                        >
+                          Kayıt Ol
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+                <div className="border-t border-gray-200 py-6 px-4">
+                  <a href="#" className="-m-2 p-2 flex items-center">
+                    <img
+                      src="https://tailwindui.com/img/flags/flag-canada.svg"
+                      alt=""
+                      className="w-5 h-auto block flex-shrink-0"
+                    />
+                    <span className="ml-3 block text-base font-medium text-gray-900">
+                      CAD
+                    </span>
+                    <span className="sr-only">, change currency</span>
+                  </a>
+                </div>
+              </div>
+            </Transition.Child>
+          </Dialog>
+        </Transition.Root>
+
+        <header className="relative bg-white">
+          <p className="bg-indigo-600 h-10 flex items-center justify-center text-sm font-medium text-white px-4 sm:px-6 lg:px-8">
+            Get free delivery on orders over $100
+          </p>
+
+          <nav
+            aria-label="Top"
+            className=" shadow-xl  mx-auto px-4 sm:px-6 lg:px-8 "
+          >
+            <div className="border-b border-gray-200">
+              <div className="h-16 flex items-center">
+                <button
+                  type="button"
+                  className="bg-white p-2 rounded-md text-gray-400 lg:hidden"
+                  onClick={() => setOpen(true)}
+                >
+                  <span className="sr-only">Open menu</span>
+                  <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+
+                {/* Logo */}
+                <div className="ml-4 flex lg:ml-0">
+                  <Link href="/" passHref>
+                    <a href="#">
+                      <span className="sr-only">Workflow</span>
+                      <img
+                        className="h-8 w-auto"
+                        src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+                        alt=""
+                      />
+                    </a>
+                  </Link>
+                </div>
+
+                {/* Flyout menus */}
+                <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
+                  <div className="h-full flex space-x-8">
+                    {navigation.categories.map((category) => (
+                      <Popover key={category.name} className="flex">
+                        {({ open }) => (
+                          <>
+                            <div className="relative flex">
+                              <Popover.Button
+                                className={classNames(
+                                  open
+                                    ? "border-indigo-600 text-indigo-600"
+                                    : "border-transparent text-gray-700 hover:text-gray-800",
+                                  "relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
+                                )}
+                              >
+                                {category.name}
+                              </Popover.Button>
+                            </div>
+
+                            <Transition
+                              as={Fragment}
+                              enter="transition ease-out duration-200"
+                              enterFrom="opacity-0"
+                              enterTo="opacity-100"
+                              leave="transition ease-in duration-150"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Popover.Panel className="absolute top-full inset-x-0 text-sm text-gray-500">
+                                {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
+                                <div
+                                  className="absolute inset-0 top-1/2 bg-white shadow"
+                                  aria-hidden="true"
+                                />
+
+                                <div className="relative bg-white">
+                                  <div className="max-w-7xl mx-auto px-8">
+                                    <div className="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
+                                      <div className="col-start-2 grid grid-cols-2 gap-x-8">
+                                        {category.featured.map((item) => (
+                                          <div
+                                            key={item.name}
+                                            className="group relative text-base sm:text-sm"
+                                          >
+                                            <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
+                                              <img
+                                                src={item.imageSrc}
+                                                alt={item.imageAlt}
+                                                className="object-center object-cover"
+                                              />
+                                            </div>
+                                            <a
+                                              href={item.href}
+                                              className="mt-6 block font-medium text-gray-900"
+                                            >
+                                              <span
+                                                className="absolute z-10 inset-0"
+                                                aria-hidden="true"
+                                              />
+                                              {item.name}
+                                            </a>
+                                            <p
+                                              aria-hidden="true"
+                                              className="mt-1"
+                                            >
+                                              Shop now
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                      <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
+                                        {category.sections.map((section) => (
+                                          <div key={section.name}>
+                                            <p
+                                              id={`${section.name}-heading`}
+                                              className="font-medium text-gray-900"
+                                            >
+                                              {section.name}
+                                            </p>
+                                            <ul
+                                              role="list"
+                                              aria-labelledby={`${section.name}-heading`}
+                                              className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                            >
+                                              {section.items.map((item) => (
+                                                <li
+                                                  key={item.name}
+                                                  className="flex"
+                                                >
+                                                  <a
+                                                    href={item.href}
+                                                    className="hover:text-gray-800"
+                                                  >
+                                                    {item.name}
+                                                  </a>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Popover.Panel>
+                            </Transition>
+                          </>
+                        )}
+                      </Popover>
+                    ))}
+
+                    {navigation.pages.map((page) => (
+                      <a
+                        key={page.name}
+                        href={page.href}
+                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                      >
+                        <Link href="/products" passHref>
+                          {page.name}
+                        </Link>
+                      </a>
+                    ))}
+                  </div>
+                </Popover.Group>
+
+                <div className="ml-auto flex items-center">
+                  {loggedIn ? (
+                    ""
+                  ) : (
+                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                      <Link href="auth/login" passHref>
+                        <a
+                          href="#"
+                          className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                        >
+                          Giriş
+                        </a>
+                      </Link>
+                      <span
+                        className="h-6 w-px bg-gray-200"
+                        aria-hidden="true"
+                      />
+                      <Link href="auth/register" passHref>
+                        <a
+                          href="#"
+                          className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                        >
+                          Kayıt Ol
+                        </a>
+                      </Link>
+                    </div>
+                  )}
+                  <div className="hidden lg:ml-8 lg:flex">
+                    {user?.role === "admin" ? (
+                      <div className="flex space-x-5">
+                        <Link href="/admin" passHref>
+                          <a>
+                            <Button label="Admin" />
+                          </a>
+                        </Link>
+                        <Link href="/profile" passHref>
+                          <a>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6 mt-[6px]"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="gray"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                              />
+                            </svg>
+                          </a>
+                        </Link>
+                      </div>
+                    ) : (
+                      <Link href="/profile" passHref>
+                        <a>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
+                            className="h-6 w-6 mt-[3px]"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke="currentColor"
+                            stroke="gray"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               strokeWidth="2"
-                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                             />
                           </svg>
-                        </div>
-                      </div>
-                    </button>
-                  </a>
-                </Link>
-              </div>
-            </div>
-
-            <div className="block">
-              <div className="inline relative">
-                <button
-                  type="button"
-                  className="flex justify-center items-center  px-2 border rounded-full hover:shadow-lg"
-                >
-                  <div className="w-8 h-8 flex-grow-0 flex-shrink-0  flex justify-center items-center">
-                    <svg
-                      viewBox="0 0 32 32"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      role="presentation"
-                      focusable="false"
-                      style={{
-                        display: "block",
-                        height: "100%",
-                        width: "100%",
-                        fill: "currentcolor",
-                      }}
+                        </a>
+                      </Link>
+                    )}
+                    {/* <a
+                      href="#"
+                      className="text-gray-700 hover:text-gray-800 flex items-center"
                     >
-                      <path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z"></path>
-                    </svg>
+                      <img
+                        src="https://tailwindui.com/img/flags/flag-canada.svg"
+                        alt=""
+                        className="w-5 h-auto block flex-shrink-0"
+                      />
+                      <span className="ml-3 block text-sm font-medium">
+                        CAD
+                      </span>
+                      <span className="sr-only">, change currency</span>
+                    </a> */}
                   </div>
-                </button>
+
+                  {/* Search */}
+                  <div className="flex lg:ml-6">
+                    <a
+                      href="#"
+                      className="p-2 text-gray-400 hover:text-gray-500"
+                    >
+                      <span className="sr-only">Search</span>
+                      <SearchIcon className="w-6 h-6" aria-hidden="true" />
+                    </a>
+                  </div>
+
+                  {/* Cart */}
+                  <div className="ml-4 flow-root lg:ml-6">
+                    <Link href="/basket" passHref>
+                      <a href="#" className="group -m-2 p-2 flex items-center">
+                        <ShoppingBagIcon
+                          className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                          {items.length}
+                        </span>
+                        <span className="sr-only">items in cart, view bag</span>
+                      </a>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </nav>
+          </nav>
+        </header>
+      </div>
     </>
   );
 };

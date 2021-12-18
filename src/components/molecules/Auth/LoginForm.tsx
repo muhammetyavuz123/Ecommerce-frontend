@@ -2,17 +2,35 @@ import { FC } from "react";
 import { Input } from "../../atoms";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useAuth } from "../../../contexts/authContext";
+import { loginFetch } from "../../../apis";
 
 interface IFormInput {
-  name: string;
   email: string;
-  phone: number;
   password: string;
 }
 export const LoginForm: FC<{}> = () => {
-  const { register, handleSubmit } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log(data.email);
+  const router = useRouter();
+  const { login } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      const loginResponse = await loginFetch({
+        password: data.password,
+        email: data.email,
+      });
+
+      login(loginResponse.data);
+      router.push("/");
+    } catch (e: any) {
+      const error = e.response.data.message;
+      return error;
+    }
   };
   return (
     <div>
@@ -34,7 +52,10 @@ export const LoginForm: FC<{}> = () => {
             <a>Kayıt Ol</a>
           </Link>
         </div>
-        <button className="uppercase block w-full p-4 my-7 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">
+        <button
+          type="submit"
+          className="uppercase block w-full p-4 my-7 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none"
+        >
           Giriş
         </button>
       </form>

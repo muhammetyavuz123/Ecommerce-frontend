@@ -8,6 +8,8 @@ export const InfoCard: FC<{
   ProductCount?: string;
   ProductCountKind?: string;
   date: string;
+  buttonTitle: string;
+  addToBasket?: () => void;
 }> = ({
   ProductTitle,
   ProductPrice,
@@ -16,6 +18,8 @@ export const InfoCard: FC<{
   ProductCount,
   ProductCountKind,
   date,
+  addToBasket,
+  buttonTitle,
 }) => {
   return (
     <>
@@ -78,10 +82,15 @@ export const InfoCard: FC<{
         </div>
 
         <button
+          onClick={addToBasket}
           type="button"
-          className="h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white"
+          className={
+            buttonTitle === "Sepetten Çıkar"
+              ? "h-14 px-6 py-2 font-semibold rounded-xl bg-gray-500 hover:bg-indigo-500 text-white"
+              : "h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white"
+          }
         >
-          Sepete Ekle
+          {buttonTitle}
         </button>
       </div>
     </>

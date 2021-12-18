@@ -8,7 +8,7 @@ export const AbouthCard: FC<{}> = ({}) => {
           <h2 className="text-3xl font-semibold text-gray-800">
             Merhaba,
             <span className="bg-indigo-600 text-white rounded px-1">
-              Ben Emre.
+              Ben Muhammed.
             </span>
             Tanıştığıma memnun oldum.
           </h2>

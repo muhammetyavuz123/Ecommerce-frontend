@@ -3,10 +3,13 @@ export { Breadcrumbs } from "./Breadcrumbs";
 export { AbouthCard } from "./AbouthCard";
 export { BannerCard } from "./BannerCard";
 export { Tabs } from "./Tabs";
-export { Header } from "./Admin";
-export { SideBar } from "./Admin";
-export { OrderTable } from "./Admin";
-export { ProductTable } from "./Admin";
+export {
+  Header,
+  SideBar,
+  OrderTable,
+  ProductTable,
+  CreateProduct,
+} from "./Admin";
 export { Hero } from "./Main/Hero";
 export { HeroKategoryCard } from "./Main/HeroKategoryCard";
 export { Banner } from "./Banner";

@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { LeftImageCard, RegisterForm, RightFormCard } from "../../molecules";
-
 export const RegisterSection: FC<{}> = () => {
   return (
     <>

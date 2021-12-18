@@ -16,3 +16,19 @@ type product = {
   photos: string[];
   createdAt: string;
 };
+
+type order = {
+  _id: string;
+  adress: string;
+  items: {
+    _id: string;
+    photos: string;
+    title: string;
+    description: string;
+  };
+  user: {
+    _id: string;
+    role: string;
+    email: string;
+  };
+};

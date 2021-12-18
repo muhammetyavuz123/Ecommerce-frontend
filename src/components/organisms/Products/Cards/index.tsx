@@ -2,9 +2,12 @@ import { FC, useState, useEffect } from "react";
 import { ProductCard } from "../../../molecules/ProductCard";
 import { useQuery, useQueryClient } from "react-query";
 import { fetchProducts } from "../../../../apis";
-export const ProductsCards: FC = () => {
+import { useBasket } from "../../../../contexts/BasketContext";
+
+export const ProductsCards: FC = ({}) => {
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
+  const { addToBasket, items } = useBasket();
 
   const { status, data, error, isFetching, isPreviousData } = useQuery<
     products[]
@@ -21,6 +24,12 @@ export const ProductsCards: FC = () => {
     }
   }, [data, page, queryClient]);
 
+  const findBasketItem = (item: any) => {
+    const itemFind = items.find((basket_item) => basket_item._id === item._id);
+
+    addToBasket(item, itemFind);
+  };
+
   return (
     <>
       {status === "loading" && !error ? (
@@ -31,18 +40,20 @@ export const ProductsCards: FC = () => {
         ""
       )}
       <div className=" grid gap-8 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2">
-        {data?.map(({ title, price, photos, _id }) => {
+        {data?.map((item) => {
           return (
             <ProductCard
-              key={_id}
+              key={item._id}
               ProductCardList={[
                 {
-                  id: _id,
-                  title: title,
-                  productPrice: price,
+                  id: item._id,
+                  buttonTitle: "Sepete Ekle",
+                  title: item.title,
+                  productPrice: item.price,
                   stockStatus: "Stokta ",
                   city: "İstanbul",
-                  photos: photos[0],
+                  photos: item.photos[0],
+                  addToBasket: () => findBasketItem(item),
                 },
               ]}
             />

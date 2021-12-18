@@ -4,14 +4,25 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { fetchProduct } from "../../../apis";
 import moment from "moment";
+import { useBasket } from "../../../contexts/BasketContext";
+import product from "../../../../pages/product/[id]";
+
 export const ProductDetail: FC<{}> = () => {
   const router = useRouter();
+  const { items, addToBasket } = useBasket();
+
   const { id } = router.query;
   const { isLoading, error, data } = useQuery<product, Error>(
     ["product", id],
     () => fetchProduct(id)
   );
-  console.log(moment(data?.createdAt).format("DD / MM / YY"));
+
+  const findBasketItem = items.find((item) => item._id === id);
+  console.log("findBasketItem", findBasketItem);
+
+  const addBasket = () => {
+    addToBasket(data, findBasketItem);
+  };
 
   return (
     <>
@@ -22,17 +33,23 @@ export const ProductDetail: FC<{}> = () => {
           </div>
           <div>
             {data ? (
-              <InfoCard
-                ProductTitle={data.title}
-                ProductPrice={data.price}
-                ProductSales="12"
-                ProductDescription={data.description}
-                ProductCount={moment(data.createdAt).format("DD / MM / YY")}
-                date={moment(data.createdAt).format("DD/MM/YY")}
-                ProductCountKind="Koli"
-              />
+              <>
+                <InfoCard
+                  buttonTitle={
+                    findBasketItem ? "Sepetten Çıkar" : "Sepete Ekle "
+                  }
+                  ProductTitle={data.title}
+                  ProductPrice={data.price}
+                  ProductSales="12"
+                  ProductDescription={data.description}
+                  ProductCount={moment(data.createdAt).format("DD / MM / YY")}
+                  date={moment(data.createdAt).format("DD/MM/YY")}
+                  ProductCountKind="Koli"
+                  addToBasket={() => addBasket()}
+                />
+              </>
             ) : (
-              "Loadin"
+              "Loading"
             )}
           </div>
         </div>

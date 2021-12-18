@@ -1,8 +1,8 @@
 import Head from "next/head";
-import { FC } from "react";
-import { ProductSection } from "../../src/components/organisms";
+import { Breadcrumbs } from "../src/components/molecules";
+import { Navbar, Footer, Baskett } from "../src/components/organisms";
 
-export default function products() {
+export default function Custom404() {
   return (
     <div>
       <Head>
@@ -12,7 +12,10 @@ export default function products() {
       </Head>
 
       <main>
-        <ProductSection />
+        <Navbar />
+        <Breadcrumbs page="404 Page" />
+        <div>404</div>
+        <Footer />
       </main>
     </div>
   );

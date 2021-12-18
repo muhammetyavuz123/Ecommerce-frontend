@@ -3,14 +3,16 @@
 import { FC } from "react";
 
 export const OrderTable: FC<{
-  OrderList: {
-    orderImage: string;
-    orderName: string;
-    orderCount: string;
-    orderPrice: string;
-    orderTotalPrice: string;
-  }[];
-}> = ({ OrderList }) => {
+  orderList:
+    | {
+        orderImage: string;
+        orderName: string;
+        orderCount: string;
+        orderPrice: string;
+        orderTotalPrice: string;
+      }[]
+    | undefined;
+}> = ({ orderList }) => {
   return (
     <>
       <h2 className="flex justify-center items-center mt-8 mb-8 text-2xl  font-semibold">
@@ -30,7 +32,7 @@ export const OrderTable: FC<{
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-light">
-                {OrderList.map(
+                {orderList?.map(
                   (
                     {
                       orderName,

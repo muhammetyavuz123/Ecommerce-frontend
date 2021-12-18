@@ -3,7 +3,9 @@ import { Input } from "../../atoms";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { registerFetch } from "../../../apis";
-import { ApiError } from "next/dist/next-server/server/api-utils";
+import { useAuth } from "../../../contexts/authContext";
+import { useRouter } from "next/router";
+
 interface IFormInput {
   name: string;
   email: string;
@@ -11,6 +13,8 @@ interface IFormInput {
   password: string;
 }
 export const RegisterForm: FC<{}> = () => {
+  const router = useRouter();
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -22,6 +26,8 @@ export const RegisterForm: FC<{}> = () => {
         password: data.password,
         email: data.email,
       });
+      login(registerResponse);
+      router.push("/");
     } catch (e: any) {
       const error = e.response.data.message;
       return error;

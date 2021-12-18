@@ -10,14 +10,28 @@ export const ProductCard: FC<{
     stockStatus?: string;
     city?: string;
     photos: string;
+    buttonTitle?: string;
+    addToBasket: () => void;
   }[];
-}> = ({ ProductCardList }) => (
-  <>
-    {ProductCardList.map(
-      ({ title, productPrice, stockStatus, city, photos, id }, index) => (
-        <div key={index} className=" bg-gray-900 shadow-lg rounded-xl p-6">
-          <div className="flex flex-col ">
-            <Link href={`/product/${id}`} passHref>
+}> = ({ ProductCardList }) => {
+  return (
+    <>
+      {ProductCardList.map(
+        (
+          {
+            title,
+            productPrice,
+            stockStatus,
+            city,
+            photos,
+            id,
+            addToBasket,
+            buttonTitle,
+          },
+          index
+        ) => (
+          <div key={index} className=" bg-gray-900 shadow-lg rounded-xl p-6">
+            <div className="flex flex-col ">
               <a>
                 <div className="">
                   <div className="relative h-62 w-full mb-3">
@@ -70,9 +84,11 @@ export const ProductCard: FC<{
                         </div>
                       </div>
                     </div>
-                    <div className="text-xl text-white font-semibold mt-1">
-                      {productPrice} ₺
-                    </div>
+                    <Link href={`/product/${id}`} passHref>
+                      <div className="text-xl text-white font-semibold mt-1">
+                        {productPrice} ₺
+                      </div>
+                    </Link>
                     <div className="lg:flex  py-4  text-sm text-gray-600">
                       {/* <div className="flex-1 inline-flex items-center  mb-3">
                         <div className="w-full flex-none text-sm flex items-center text-gray-600">
@@ -133,39 +149,44 @@ export const ProductCard: FC<{
                       </div> */}
                     </div>
                     <div className="flex space-x-2 text-sm font-medium justify-start">
-                      <button className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600 ">
-                        <span>Sepete Ekle</span>
+                      <button
+                        className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600 "
+                        onClick={addToBasket}
+                      >
+                        {buttonTitle}
                       </button>
-                      <button className="transition ease-in duration-300 bg-gray-700 hover:bg-gray-800 border hover:border-gray-500 border-gray-700 hover:text-white  hover:shadow-lg text-gray-400 rounded-full w-9 h-9 text-center p-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className=""
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                          />
-                        </svg>
-                      </button>
+                      <Link href={`/product/${id}`} passHref>
+                        <button className="transition ease-in duration-300 bg-gray-700 hover:bg-gray-800 border hover:border-gray-500 border-gray-700 hover:text-white  hover:shadow-lg text-gray-400 rounded-full w-9 h-9 text-center p-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className=""
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            />
+                          </svg>
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
               </a>
-            </Link>
+            </div>
           </div>
-        </div>
-      )
-    )}
-  </>
-);
+        )
+      )}
+    </>
+  );
+};
